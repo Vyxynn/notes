@@ -1,0 +1,55 @@
+{
+    "notes": [
+        {
+            "title": "First Note",
+            "content": "This is the content of my first note",
+            "tags": ["important", "personal"]
+        },
+        {
+            "title": "Second Note",
+            "content": "This is the content of my second note",
+            "tags": ["work", "shopping"]
+        },
+        {
+            "title": "Third Note",
+            "content": "This is the content of my third note",
+            "tags": ["school", "friends"]
+        },
+        {
+            "title": "Fourth Note",
+            "content": "This is the content of my fourth note",
+            "tags": ["hobbies", "music"]
+        },
+        {
+            "title": "Fifth Note",
+            "content": "This is the content of my fifth note",
+            "tags": ["family", "vacation"]
+        },
+        {
+            "title": "Sixth Note",
+            "content": "This is the content of my sixth note",
+            "tags": ["health", "fitness"]
+        },
+        {
+            "title": "Seventh Note",
+            "content": "This is the content of my seventh note",
+            "tags": ["travel", "adventure"]
+        },
+        {
+            "title": "Eighth Note",
+            "content": "This is the content of my eighth note",
+            "tags": ["technology", "coding"]
+        },
+        {
+            "title": "Ninth Note",
+            "content": "This is the content of my ninth note",
+            "tags": ["books", "reading"]
+        },
+        {
+            "title": "Tenth Note",
+            "content": "This is the content of my tenth note",
+            "tags": ["movies", "entertainment"]
+        }
+    ]
+}
+
