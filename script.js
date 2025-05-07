@@ -127,7 +127,7 @@ addNoteButton.addEventListener('click', function() {
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title"><br>
         <label for="content">Content:</label><br>
-        <textarea id="content" name="content" style="resize: none;"></textarea><br>
+        <textarea id="content" name="content" style="resize: none; overflow: hidden;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea><br>
         <label for="tags">Tags:</label><br>
 
         <div id="tagsContainer"></div>
@@ -147,4 +147,28 @@ addNoteButton.addEventListener('click', function() {
 
     document.body.appendChild(blur);
     document.body.appendChild(popup);
+
+    // add event listeners to buttons
+    const cancelButton = document.getElementById('cancelButton');
+    const saveButton = document.getElementById('saveButton');
+    const addTagButton = document.getElementById('addTagButton');
+    const addTagInput = document.getElementById('addTagInput');
+
+    cancelButton.addEventListener('click', function() {
+        document.body.removeChild(popup);
+        document.body.removeChild(blur);
+    });
+
+    addTagButton.addEventListener('click', function() {
+        const tag = addTagInput.value.trim();
+        if (tag) {
+            const tagDiv = document.createElement('div');
+            tagDiv.classList.add('tagSearch');
+            tagDiv.innerHTML = `
+                <p>${tag}</p>
+            `;
+            document.getElementById('tagsContainer').appendChild(tagDiv);
+            addTagInput.value = '';
+        }
+    });
 });
