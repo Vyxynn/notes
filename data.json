@@ -1,54 +1,79 @@
 {
     "notes": [
         {
-            "title": "First Note",
-            "content": "This is the content of my first note",
-            "tags": ["important", "personal"]
+            "title": "Buy milk",
+            "content": "I need to pick up some milk from the store",
+            "tags": ["shopping"]
         },
         {
-            "title": "Second Note",
-            "content": "This is the content of my second note",
-            "tags": ["work", "shopping"]
+            "title": "Call mom",
+            "content": "I need to call my mom and catch up",
+            "tags": ["family"]
         },
         {
-            "title": "Third Note",
-            "content": "This is the content of my third note",
-            "tags": ["school", "friends"]
+            "title": "Finish project",
+            "content": "I need to finish my project for work",
+            "tags": ["work", "project"]
         },
         {
-            "title": "Fourth Note",
-            "content": "This is the content of my fourth note",
-            "tags": ["hobbies", "music"]
+            "title": "Watch movie",
+            "content": "I want to watch a movie tonight",
+            "tags": ["entertainment"]
         },
         {
-            "title": "Fifth Note",
-            "content": "This is the content of my fifth note",
-            "tags": ["family", "vacation"]
+            "title": "Exercise",
+            "content": "I need to exercise more",
+            "tags": ["health"]
         },
         {
-            "title": "Sixth Note",
-            "content": "This is the content of my sixth note",
-            "tags": ["health", "fitness"]
+            "title": "Plan vacation",
+            "content": "I need to plan my vacation",
+            "tags": ["travel"]
         },
         {
-            "title": "Seventh Note",
-            "content": "This is the content of my seventh note",
-            "tags": ["travel", "adventure"]
+            "title": "Practice coding",
+            "content": "I want to practice my coding skills",
+            "tags": ["technology"]
         },
         {
-            "title": "Eighth Note",
-            "content": "This is the content of my eighth note",
-            "tags": ["technology", "coding"]
+            "title": "Read book",
+            "content": "I want to read a book",
+            "tags": ["books"]
         },
         {
-            "title": "Ninth Note",
-            "content": "This is the content of my ninth note",
-            "tags": ["books", "reading"]
+            "title": "Write letter",
+            "content": "I want to write a letter to a friend",
+            "tags": ["personal"]
         },
         {
-            "title": "Tenth Note",
-            "content": "This is the content of my tenth note",
-            "tags": ["movies", "entertainment"]
+            "title": "Buy gift",
+            "content": "I need to buy a gift for someone",
+            "tags": ["shopping"]
+        },
+        {
+            "title": "Plan party",
+            "content": "I need to plan a party",
+            "tags": ["social"]
+        },
+        {
+            "title": "Take photo",
+            "content": "I want to take a photo",
+            "tags": ["photography"]
+        },
+        {
+            "title": "Start diet",
+            "content": "I want to start a diet",
+            "tags": ["health"]
+        },
+        {
+            "title": "Learn language",
+            "content": "I want to learn a new language",
+            "tags": ["language"]
+        },
+        {
+            "title": "Create budget",
+            "content": "I need to create a budget",
+            "tags": ["finance"]
         }
     ]
 }
