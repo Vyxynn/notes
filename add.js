@@ -65,6 +65,30 @@ addNoteButton.addEventListener('click', function() {
     const underlineButton = document.getElementById('underlineButton');
     const content = document.getElementById('content');
 
+    const titleInput = document.getElementById('title');
+    const previewTitle = document.getElementById('previewTitle');
+    const contentInput = document.getElementById('content');
+    const previewContent = document.getElementById('previewContent');
+    const previewTags = document.getElementById('previewTags');
+    let oldContent = "";
+
+    titleInput.addEventListener('input', function() {
+        if (titleInput.value) {
+            previewTitle.innerHTML = titleInput.value;
+        } else {
+            previewTitle.innerHTML = 'Title';
+        }
+    });
+
+    contentInput.addEventListener('input', function() {
+        const newContent = contentInput.value;
+        const diff = diffString(oldContent, newContent);
+        console.log(diff);
+        oldContent = newContent;
+
+        updateContentPreview(diff.added, diff.removed, diff.addedIndices, diff.removedIndices);
+    });
+
     cancelButton.addEventListener('click', function() {
         document.body.removeChild(popup);
         document.body.removeChild(blur);
@@ -92,6 +116,40 @@ addNoteButton.addEventListener('click', function() {
         }
     });
 });
+
+function diffString(oldStr, newStr) {
+    let addedChars = '';
+    let removedChars = '';
+    let addedIndices = [];
+    let removedIndices = [];
+
+    const oldLen = oldStr.length;
+    const newLen = newStr.length;
+    const maxLength = Math.max(oldLen, newLen);
+
+    for (let i = 0; i < maxLength; i++) {
+        if (i < oldLen && i < newLen) {
+            if (oldStr[i] !== newStr[i]) {
+                addedChars += newStr[i];
+                removedChars += oldStr[i];
+                addedIndices.push(i);
+                removedIndices.push(i);
+            }
+        } else if (i < newLen) {
+            addedChars += newStr[i];
+            addedIndices.push(i);
+        } else if (i < oldLen) {
+            removedChars += oldStr[i];
+            removedIndices.push(i);
+        }
+    }
+
+    return { added: addedChars, removed: removedChars, addedIndices, removedIndices };
+}
+
+function updateContentPreview(addedChars, removedChars, addedIndices, removedIndices) {
+    console.log(addedChars, removedChars, addedIndices, removedIndices);
+}
 
 /*
 <h2>${note.title}</h2>
