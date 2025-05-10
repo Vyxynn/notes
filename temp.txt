@@ -1,8 +1,4 @@
 addNoteButton.addEventListener('click', function() {
-    console.log('Add Note button clicked');
-});
-
-addNoteButton.addEventListener('click', function() {
     // create popup and blur background
     const popup = document.createElement('div');
     popup.classList.add('popup');
@@ -13,24 +9,44 @@ addNoteButton.addEventListener('click', function() {
     blur.style.display = 'block';
 
     let popupContent = `
-        <h2>Add Note</h2>
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="content">Content:</label><br>
-        <textarea id="content" name="content" style="resize: none; overflow: hidden;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea><br>
-        <label for="tags">Tags:</label><br>
-
-        <div id="tagsContainer"></div>
-        <div id="addTagContainer">
-            <input type="text" id="addTagInput" placeholder="Add tag...">
-            <button id="addTagButton">Add Tag</button>
+    <div id="popupFlex">
+        <div id="popupPreview">
+            <h2>Preview</h2>
+            <hr>
+            <div id="previewTitle">Title</div>
+            <div id="previewContent">Content</div>
+            <div id="previewTags">Tags</div>
         </div>
 
-        <div id="buttonsContainer">
-            <button id="cancelButton">Cancel</button>
-            <button id="saveButton">Save</button>
-        </div>
+        <div id="popupCustomization">
+            <h2>Add Note</h2>
+            <hr>
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title"><br>
 
+            <label for="content">Content:</label><br>
+            <textarea id="content" name="content" style="resize: none; overflow: hidden;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea><br>
+            <div id="textButtonContainer">
+                <button id="boldButton">B</button>
+                <button id="italicButton">I</button>
+                <button id="underlineButton">U</button>
+            </div>
+            
+            <label for="tags">Tags:</label><br>
+            <div id="tagsContainer"></div>
+            <div id="addTagContainer">
+                <input type="text" id="addTagInput" placeholder="Add tag...">
+                <button id="addTagButton">Add Tag</button>
+            </div>
+
+            <div id="buttonsContainer">
+                <button id="cancelButton">Cancel</button>
+                <button id="saveButton">Save</button>
+            </div>
+        </div>
+    </div>
+
+    
     `;
 
     popup.innerHTML = popupContent;
@@ -44,6 +60,33 @@ addNoteButton.addEventListener('click', function() {
     const addTagButton = document.getElementById('addTagButton');
     const addTagInput = document.getElementById('addTagInput');
     const tagsContainer = document.getElementById('tagsContainer');
+    const boldButton = document.getElementById('boldButton');
+    const italicButton = document.getElementById('italicButton');
+    const underlineButton = document.getElementById('underlineButton');
+
+    const titleInput = document.getElementById('title');
+    const previewTitle = document.getElementById('previewTitle');
+    const contentInput = document.getElementById('content');
+    const previewContent = document.getElementById('previewContent');
+    const previewTags = document.getElementById('previewTags');
+    let oldContent = "";
+
+    titleInput.addEventListener('input', function() {
+        if (titleInput.value) {
+            previewTitle.innerHTML = titleInput.value;
+        } else {
+            previewTitle.innerHTML = 'Title';
+        }
+    });
+
+    contentInput.addEventListener('input', function() {
+        const newContent = contentInput.value;
+        const diff = diffString(oldContent, newContent);
+        console.log(diff);
+        oldContent = newContent;
+
+        updateContentPreview(diff.added, diff.removed, diff.addedIndices, diff.removedIndices);
+    });
 
     cancelButton.addEventListener('click', function() {
         document.body.removeChild(popup);
@@ -71,4 +114,123 @@ addNoteButton.addEventListener('click', function() {
             tagsContainer.removeChild(tagDiv);
         }
     });
+
+    // add event listeners to text buttons
+    boldButton.addEventListener('click', function() {
+        if (boldButton.classList.contains('clicked')) {
+            boldButton.classList.remove('clicked');
+            isClicked = false;
+        } else {
+            boldButton.classList.add('clicked');
+            isClicked = true;
+        }
+        addContentPreviewDecoration('bold', isClicked);
+
+    });
+
+    italicButton.addEventListener('click', function() {
+        if (italicButton.classList.contains('clicked')) {
+            italicButton.classList.remove('clicked');
+            isClicked = false;
+        } else {
+            italicButton.classList.add('clicked');
+            isClicked = true;
+        }
+        addContentPreviewDecoration('italic', isClicked);
+    });
+
+    underlineButton.addEventListener('click', function() {
+        if (underlineButton.classList.contains('clicked')) {
+            underlineButton.classList.remove('clicked');
+            isClicked = false;
+        } else {
+            underlineButton.classList.add('clicked');
+            isClicked = true;
+        }
+        addContentPreviewDecoration('underline', isClicked);
+    });
 });
+
+function diffString(oldStr, newStr) {
+    let addedChars = '';
+    let removedChars = '';
+    let addedIndices = [];
+    let removedIndices = [];
+
+    const oldLen = oldStr.length;
+    const newLen = newStr.length;
+    const maxLength = Math.max(oldLen, newLen);
+
+    for (let i = 0; i < maxLength; i++) {
+        if (i < oldLen && i < newLen) {
+            if (oldStr[i] !== newStr[i]) {
+                addedChars += newStr[i];
+                removedChars += oldStr[i];
+                addedIndices.push(i);
+                removedIndices.push(i);
+            }
+        } else if (i < newLen) {
+            addedChars += newStr[i];
+            addedIndices.push(i);
+        } else if (i < oldLen) {
+            removedChars += oldStr[i];
+            removedIndices.push(i);
+        }
+    }
+
+    return { added: addedChars, removed: removedChars, addedIndices, removedIndices };
+}
+
+let contentPreviewHTML = [];
+function updateContentPreview(addedChars, removedChars, addedIndices, removedIndices) {
+    addedIndices.sort((a, b) => a - b);
+    removedIndices.sort((a, b) => b - a);
+
+    addedIndices.forEach((index, i) => {
+        contentPreviewHTML.splice(index, 0, addedChars[i]);
+    });
+
+    removedIndices.forEach((index, i) => {
+        contentPreviewHTML.splice(index, 1);
+    });
+
+    // console.log(contentPreviewHTML);
+    previewContent.innerHTML = contentPreviewHTML.join('');
+    console.log(previewContent.innerHTML);
+}
+
+function addContentPreviewDecoration(type, clickedBoolean) {
+    console.log(type, clickedBoolean);
+    
+    if (type === 'bold') {
+        if (clickedBoolean) {
+            contentPreviewHTML[contentPreviewHTML.length] = `<b>`;
+        } else {
+            contentPreviewHTML[contentPreviewHTML.length] = `</b>`;
+        }
+    } else if (type === 'italic') {
+        if (clickedBoolean) {
+            contentPreviewHTML[contentPreviewHTML.length] = `<i>`;
+        } else {
+            contentPreviewHTML[contentPreviewHTML.length] = `</i>`;
+        }
+    } else if (type === 'underline') {
+        if (clickedBoolean) {
+            contentPreviewHTML[contentPreviewHTML.length] = `<u>`;
+        } else {
+            contentPreviewHTML[contentPreviewHTML.length] = `</u>`;
+        }
+    }
+
+    // console.log(contentPreviewHTML);
+    previewContent.innerHTML = contentPreviewHTML.join('');
+    console.log(previewContent.innerHTML);
+}
+
+/*
+<h2>${note.title}</h2>
+<p>${note.content}</p>
+<div class="tags">
+    ${note.tags.map(tag => `<div class="tag">${tag}</div>`).join('')}
+</div>
+*/

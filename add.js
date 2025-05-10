@@ -21,28 +21,26 @@ addNoteButton.addEventListener('click', function() {
         <div id="popupCustomization">
             <h2>Add Note</h2>
             <hr>
-            <label for="title">Title:</label><br>
-            <input type="text" id="title" name="title"><br>
+            <form>
+                <label for="title">Title:</label><br>
+                <input type="text" id="title" name="title"><br>
 
-            <label for="content">Content:</label><br>
-            <textarea id="content" name="content" style="resize: none; overflow: hidden;" oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea><br>
-            <div id="textButtonContainer">
-                <button id="boldButton">B</button>
-                <button id="italicButton">I</button>
-                <button id="underlineButton">U</button>
-            </div>
+                <label for="content">Content:</label><br>
+                <div id="editor-container"><div id="editor"></div></div>
+                
+                <label for="tags">Tags:</label><br>
+                <div id="tagsContainer"></div>
+                <div id="addTagContainer">
+                    <input type="text" id="addTagInput" placeholder="Add tag...">
+                    <button id="addTagButton">Add Tag</button>
+                </div>
+
+                <div id="buttonsContainer">
+                    <button id="cancelButton">Cancel</button>
+                    <button id="saveButton">Save</button>
+                </div>
+            </form>
             
-            <label for="tags">Tags:</label><br>
-            <div id="tagsContainer"></div>
-            <div id="addTagContainer">
-                <input type="text" id="addTagInput" placeholder="Add tag...">
-                <button id="addTagButton">Add Tag</button>
-            </div>
-
-            <div id="buttonsContainer">
-                <button id="cancelButton">Cancel</button>
-                <button id="saveButton">Save</button>
-            </div>
         </div>
     </div>
 
@@ -63,7 +61,6 @@ addNoteButton.addEventListener('click', function() {
     const boldButton = document.getElementById('boldButton');
     const italicButton = document.getElementById('italicButton');
     const underlineButton = document.getElementById('underlineButton');
-    const content = document.getElementById('content');
 
     const titleInput = document.getElementById('title');
     const previewTitle = document.getElementById('previewTitle');
@@ -80,8 +77,21 @@ addNoteButton.addEventListener('click', function() {
         }
     });
 
-    contentInput.addEventListener('input', function() {
-        const newContent = contentInput.value;
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline'],
+            ['image', 'code-block', 'video'],
+            ],
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow', // or 'bubble'
+    });
+
+    const editor = document.getElementById('editor');
+    editor.addEventListener('input', function() {
+        const newContent = editor.innerText;
         const diff = diffString(oldContent, newContent);
         console.log(diff);
         oldContent = newContent;
@@ -117,44 +127,3 @@ addNoteButton.addEventListener('click', function() {
     });
 });
 
-function diffString(oldStr, newStr) {
-    let addedChars = '';
-    let removedChars = '';
-    let addedIndices = [];
-    let removedIndices = [];
-
-    const oldLen = oldStr.length;
-    const newLen = newStr.length;
-    const maxLength = Math.max(oldLen, newLen);
-
-    for (let i = 0; i < maxLength; i++) {
-        if (i < oldLen && i < newLen) {
-            if (oldStr[i] !== newStr[i]) {
-                addedChars += newStr[i];
-                removedChars += oldStr[i];
-                addedIndices.push(i);
-                removedIndices.push(i);
-            }
-        } else if (i < newLen) {
-            addedChars += newStr[i];
-            addedIndices.push(i);
-        } else if (i < oldLen) {
-            removedChars += oldStr[i];
-            removedIndices.push(i);
-        }
-    }
-
-    return { added: addedChars, removed: removedChars, addedIndices, removedIndices };
-}
-
-function updateContentPreview(addedChars, removedChars, addedIndices, removedIndices) {
-    console.log(addedChars, removedChars, addedIndices, removedIndices);
-}
-
-/*
-<h2>${note.title}</h2>
-<p>${note.content}</p>
-<div class="tags">
-    ${note.tags.map(tag => `<div class="tag">${tag}</div>`).join('')}
-</div>
-*/
