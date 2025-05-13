@@ -12,16 +12,20 @@ addNoteButton.addEventListener('click', function() {
     <div id="popupFlex">
         <div id="popupPreview">
             <h2>Preview</h2>
-            <hr>
-            <div id="previewTitle">Title</div>
-            <div id="previewContent">Content</div>
-            <div id="previewTags">Tags</div>
+            <hr><br>
+            <div class="note">
+                <h2 id="previewTitle"></h2>
+                <p id="previewContent"></p>
+                <div class="tags">
+
+                </div>
+            </div>
         </div>
 
         <div id="popupCustomization">
             <h2>Add Note</h2>
             <hr>
-            <form>
+            <div id="form">
                 <label for="title">Title:</label><br>
                 <input type="text" id="title" name="title"><br>
 
@@ -39,7 +43,7 @@ addNoteButton.addEventListener('click', function() {
                     <button id="cancelButton">Cancel</button>
                     <button id="saveButton">Save</button>
                 </div>
-            </form>
+            </div>
             
         </div>
     </div>
@@ -64,7 +68,7 @@ addNoteButton.addEventListener('click', function() {
 
     const titleInput = document.getElementById('title');
     const previewTitle = document.getElementById('previewTitle');
-    const contentInput = document.getElementById('content');
+    const editorInput = document.getElementById('editor');
     const previewContent = document.getElementById('previewContent');
     const previewTags = document.getElementById('previewTags');
     let oldContent = "";
@@ -73,7 +77,7 @@ addNoteButton.addEventListener('click', function() {
         if (titleInput.value) {
             previewTitle.innerHTML = titleInput.value;
         } else {
-            previewTitle.innerHTML = 'Title';
+            previewTitle.innerHTML = '';
         }
     });
 
@@ -82,21 +86,19 @@ addNoteButton.addEventListener('click', function() {
             toolbar: [
             [{ header: [1, 2, false] }],
             ['bold', 'italic', 'underline'],
-            ['image', 'code-block', 'video'],
+            ['image', 'video', 'link'],
             ],
         },
         placeholder: 'Compose an epic...',
         theme: 'snow', // or 'bubble'
     });
 
-    const editor = document.getElementById('editor');
-    editor.addEventListener('input', function() {
-        const newContent = editor.innerText;
-        const diff = diffString(oldContent, newContent);
-        console.log(diff);
-        oldContent = newContent;
-
-        updateContentPreview(diff.added, diff.removed, diff.addedIndices, diff.removedIndices);
+    quill.on('text-change', function() {
+        const html = quill.root.innerHTML;
+        console.log(html);
+        if (html) {
+            previewContent.innerHTML = html;
+        }
     });
 
     cancelButton.addEventListener('click', function() {

@@ -85,6 +85,11 @@
     margin-top: 10px;
 }
 
+.note img, .note video {
+    height: 100px;
+    width: auto;
+}
+
 .tag {
     background-color: #ccc;
     padding: 5px 10px;
