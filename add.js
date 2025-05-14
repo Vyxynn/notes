@@ -16,7 +16,7 @@ addNoteButton.addEventListener('click', function() {
             <div class="note">
                 <h2 id="previewTitle"></h2>
                 <p id="previewContent"></p>
-                <div class="tags">
+                <div id="previewTags">
 
                 </div>
             </div>
@@ -68,7 +68,6 @@ addNoteButton.addEventListener('click', function() {
 
     const titleInput = document.getElementById('title');
     const previewTitle = document.getElementById('previewTitle');
-    const editorInput = document.getElementById('editor');
     const previewContent = document.getElementById('previewContent');
     const previewTags = document.getElementById('previewTags');
     let oldContent = "";
@@ -95,7 +94,6 @@ addNoteButton.addEventListener('click', function() {
 
     quill.on('text-change', function() {
         const html = quill.root.innerHTML;
-        console.log(html);
         if (html) {
             previewContent.innerHTML = html;
         }
@@ -117,6 +115,17 @@ addNoteButton.addEventListener('click', function() {
             tagsContainer.appendChild(tagDiv);
             addTagInput.value = '';
         }
+
+        // update preview tags
+        const tags = tagsContainer.getElementsByClassName('addedTag');
+        previewTags.innerHTML = '';
+        Array.from(tags).forEach(element => {
+            const tag = element.innerHTML.trim();
+            const tagSpan = document.createElement('span');
+            tagSpan.classList.add('tag');
+            tagSpan.innerHTML = tag;
+            previewTags.appendChild(tagSpan);
+        });
     });
 
     // for each tag in the tagsContainer, add a click event listener
@@ -125,7 +134,48 @@ addNoteButton.addEventListener('click', function() {
             // remove the tag from the tagsContainer
             const tagDiv = event.target;
             tagsContainer.removeChild(tagDiv);
+
+            // update preview tags
+            const tags = tagsContainer.getElementsByClassName('addedTag');
+            previewTags.innerHTML = '';
+            Array.from(tags).forEach(element => {
+                const tag = element.innerHTML.trim();
+                const tagSpan = document.createElement('span');
+                tagSpan.classList.add('tag');
+                tagSpan.innerHTML = tag;
+                previewTags.appendChild(tagSpan);
+            });
         }
+    });
+
+    saveButton.addEventListener('click', function() {
+        const title = titleInput.value;
+        const content = quill.root.innerHTML;
+        const tags = Array.from(tagsContainer.getElementsByClassName('addedTag')).map(element => element.innerHTML.trim());
+        const note = { title, content, tags };
+        addNote(note);
+        document.body.removeChild(popup);
+        document.body.removeChild(blur);
     });
 });
 
+function addNote(note) {
+    console.log(note);
+    allNotes.push(note);
+    currentDisplay = allNotes;
+    updateScreen();
+    
+    // update tags search
+    const tags = note.tags;
+    tags.forEach(tag => {
+        if (!tagsSearchContainer.querySelector(`#${tag}`)) {
+            const tagDiv = document.createElement('div');
+            tagDiv.classList.add('tagDiv');
+            tagDiv.innerHTML = `
+                <label for="${tag}">${tag}</label>
+                <input type="checkbox" id="${tag}" value="${tag}" onclick="searchByTag('${tag}')"><br>
+            `;
+            tagsSearchContainer.appendChild(tagDiv);
+        }
+    });
+}
