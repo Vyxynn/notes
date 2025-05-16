@@ -25,7 +25,7 @@ function updateTagList() {
         const tagDiv = document.createElement('div');
         tagDiv.classList.add('tagSearch');
         tagDiv.innerHTML = `
-            <label for="${tag}">${tag}</label>
+            <label for="${tag}" style="width: fit-content;">${tag}</label>
             <input type="checkbox" id="${tag}" value="${tag}" onclick="searchByTag('${tag}')"><br>
         `;
         tagsSearchContainer.appendChild(tagDiv);
@@ -37,16 +37,44 @@ function updateScreen() {
         currentDisplay.forEach(note => {
             const noteDiv = document.createElement('div');
             noteDiv.classList.add('note');
-            noteDiv.innerHTML = `
+            noteDiv.style.display = 'grid';
+            noteDiv.style.gridTemplateColumns = '95% 5%';
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('noteButtonContainer');
+
+            const editButton = document.createElement('button');
+            editButton.classList.add('noteEditButton');
+            editButton.innerHTML = `<img src="./assets/editIcon.svg" alt="Edit Note">`;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('noteDeleteButton');
+            deleteButton.innerHTML = `<img src="./assets/deleteIcon.svg" alt="Delete Note">`;
+
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(deleteButton);
+
+            const noteInfo = document.createElement('div');
+            noteInfo.innerHTML = `
                 <h2>${note.title}</h2>
                 <p>${note.content}</p>
                 <div class="tags">
-                    ${note.tags.map(tag => `<div class="tag">${tag}</div>`).join('')}
+                    ${note.tags.map(tag => `<div class="tag" style="width: fit-content;">${tag}</div>`).join('')}
                 </div>
             `;
-            notesContainer.appendChild(noteDiv);
-        });
 
+            noteDiv.appendChild(noteInfo);
+            noteDiv.appendChild(buttonContainer);
+            notesContainer.appendChild(noteDiv);
+
+            // add event listeners to the edit and delete buttons
+            editButton.addEventListener('click', function() {
+                editNote(note);
+            });
+            deleteButton.addEventListener('click', function() {
+                deleteNote(note);
+            });
+        });
     saveToLocalStorage();
 }
 
@@ -86,4 +114,3 @@ function searchByText() {
     }
     updateScreen();
 }
-
