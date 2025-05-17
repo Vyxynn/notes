@@ -85,6 +85,13 @@
     margin-top: 10px;
 }
 
+.tags {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
 .note img, .note video {
     height: 100px;
     width: auto;

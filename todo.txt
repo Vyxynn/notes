@@ -1,3 +1,2 @@
-1. Home page with logging in, should use regex for password, saved to cookies and displayed in settings on notes page
+1. username doesn't save if remember me not clicked
 2. Theme switch in settings on notes page
-3. Edit button needs to update the localeStorage, screen, and tags search

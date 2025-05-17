@@ -7,44 +7,33 @@
     <meta name="description" content="A simple notes app with search and tag functionality.">
     <meta name="keywords" content="notes, app, search, tags, JavaScript">
     <link rel="icon" href="./assets/journal.svg" type="image/png">
+    <title>Notes App - Login</title>
 
-    <title>Notes App</title>
-
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="display.js"></script>
-    <script defer src="add.js"></script>
-    <script defer src="storage.js"></script>
-
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js" async></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" async></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script defer src="login.js"></script>
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-    <main id="container">
-        <section id="searchContainer">
-            <input type="search" id="searchInput" placeholder="Search notes...">
-        </section>
+    <div id="container">
+        <h1>Notes App Login</h1>
+        <div id="loginForm">
+            <div id="usernameDiv">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <span id="usernameError" class="error"></span>
 
-        <aside id="tagsSearchContainer">
-            <nav class="tagSearch">
-            </nav>
-        </aside>
+            <div id="passwordDiv">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <span id="passwordError" class="error"></span>
 
-        <article id="notesContainer">
-            
-        </article>
+            <div id="rememberMeDiv">
+                <label for="rememberMe">Remember Me: </label>
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+            </div>
 
-        <button id="settingsButton">
-            <img src="./assets/settingsIcon.svg" alt="Settings" width="50%" height="50%">
-        </button>
-
-        <button id="addNoteButton">
-            <img src="./assets/addIcon.svg" alt="Add Note" width="100%" height="100%">
-        </button>
-    </main>
+            <button type="submit" id="submit">Login</button>
+        </div>
 </body>
 </html>
-

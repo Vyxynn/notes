@@ -337,6 +337,26 @@ function editNote(note) {
             });
         }
     });
+
+    saveButton.addEventListener('click', function() {
+        const title = titleInput.value;
+        const content = quill.root.innerHTML;
+        const tags = Array.from(tagsContainer.getElementsByClassName('addedTag')).map(element => element.innerHTML.trim());
+        const updatedNote = { title, content, tags };
+        
+        // update the note in the allNotes array
+        const index = allNotes.findIndex(n => n.title === note.title && n.content === note.content);
+        if (index !== -1) {
+            allNotes[index] = updatedNote;
+            currentDisplay = allNotes;
+            updateScreen();
+            updateTagList();
+            saveToLocalStorage();
+        }
+
+        document.body.removeChild(popup);
+        document.body.removeChild(blur);
+    });
 }
 
 function deleteNote(note) {
