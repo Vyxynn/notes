@@ -4,6 +4,7 @@ function saveToLocalStorage(){
 }
 
 function loadFromLocalStorage() {
+    console.log('Loading notes from local storage');
     const notes = localStorage.getItem('notes');
     if (notes) {
         return JSON.parse(notes);

@@ -2,136 +2,124 @@ const usernameInput = document.getElementById("username");
 const usernameErrorDisplay = document.getElementById("usernameError");
 const passwordInput = document.getElementById("password");
 const passwordErrorDisplay = document.getElementById("passwordError");
-const loginButton = document.getElementById("submit");
 const rememberMeCheckbox = document.getElementById("rememberMe");
-
-let usernameSave = "";
+const loginButton = document.getElementById("submit");
 
 window.onload = function() {
-    usernameInput.focus();
-    usernameInput.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            passwordInput.focus();
-        }
-    });
-
-    passwordInput.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            loginButton.click();
-        }
-    });
-
-    usernameInput.textContent = "";
-    passwordInput.textContent = "";
-    usernameErrorDisplay.textContent = "";
-    passwordErrorDisplay.textContent = "";
     usernameInput.value = "";
     passwordInput.value = "";
+    usernameErrorDisplay.innerText = "";
+    passwordErrorDisplay.innerText = "";
 
-    // check if the username is saved in cookies
-    const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
-        const [name, value] = cookie.split('=');
-        acc[name] = value;
-        return acc;
-    }, {});
-    if (cookies.username) {
-        usernameInput.value = cookies.username;
+    // check if the rememberMe cookie exists
+    const rememberMeCookie = document.cookie.split('; ').find(x => x.startsWith('rememberMe'));
+    if (rememberMeCookie) {
+        // if it exists, get the username from the cookie
+        const username = rememberMeCookie.split('=')[1];
+        usernameInput.value = username;
         rememberMeCheckbox.checked = true;
     } else {
+        // if it does not exist, set the checkbox to false
         rememberMeCheckbox.checked = false;
     }
 }
 
-loginButton.addEventListener("click", function() {
-    // Clear previous error messages
-    usernameErrorDisplay.textContent = "";
-    passwordErrorDisplay.textContent = "";
+loginButton.addEventListener("click", function(event) {
+    event.preventDefault();
 
     const username = usernameInput.value;
     const password = passwordInput.value;
 
-    // at least 8 characters, contains at least: 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character
-    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    // at least 6 characters
-    const userRegex = /^[a-zA-Z0-9]{6,}$/;
+    usernameErrorDisplay.innerText = validateUsername(username);
+    passwordErrorDisplay.innerText = validatePassword(password);
 
-    try {
-        if (!username) {
-            throw new Error("Username is required");
-        }
+    if (usernameErrorDisplay.innerText === "" && passwordErrorDisplay.innerText === "") {
+        // store the username to localStorage called 'usernameDisplay'
+        localStorage.setItem('usernameDisplay', username);
 
-        if (!userRegex.test(username)) {
-            throw new Error("Username must be at least 6 characters long and can only contain letters and numbers");
-        }
-    } catch (error) {
-        usernameErrorDisplay.textContent = error.message;
-    }
+        // get the usernames and passwords from cookies
+        let encryptedUsernames = document.cookie.split('; ').find(x => x.startsWith('usernames'))?.split('=')[1];
+        let encryptedPasswords = document.cookie.split('; ').find(x => x.startsWith('passwords'))?.split('=')[1];
+        let usernames = encryptedUsernames ? JSON.parse(atob(encryptedUsernames)) : [];
+        let passwords = encryptedPasswords ? JSON.parse(atob(encryptedPasswords)) : [];
 
-    try {
-        if (!password) {
-            throw new Error("Password is required");
-        }
-
-        if (!passRegex.test(password)) {
-            throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character");
-        }
-    } catch (error) {
-        passwordErrorDisplay.textContent = error.message;
-    }
-
-    // if there are no errors, save the username and password to cookies in an encrypted object, then redirect to the notes page
-    if (username && password && userRegex.test(username) && passRegex.test(password)) {
-        const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
-            const [name, value] = cookie.split('=');
-            acc[name] = value;
-            return acc;
-        }, {});
-
-        let users = [];
-        if (cookies.user) {
-            users = JSON.parse(atob(cookies.user));
-        }
-
-        const existingUser = users.find(user => user.username === username);
-        if (existingUser) {
-            if (existingUser.password === password) {
-                usernameSave = username;
-                rememberMe();
-
-                // save cookie of the location of the user of logged in user in the array of users
-                const userIndex = users.indexOf(existingUser);
-                document.cookie = `userIndex=${userIndex}; path=/; max-age=604800`;
-
-                window.location.href = "notes.html";
-                return;
+        // if the cookies exist, check if the username is already in the list
+        if (usernames && passwords) {
+            const userIndex = usernames.indexOf(username);
+            if (userIndex !== -1) {
+                // if the username is already in the list, check if the password matches
+                if (passwords[userIndex] === password) {
+                    // if the password matches, redirect to the notes page
+                    rememberMeSave();
+                    window.location.href = "notes.html";
+                } else {
+                    // if the password does not match, show an error message
+                    passwordErrorDisplay.innerText = "Incorrect password";
+                }
             } else {
-                passwordErrorDisplay.textContent = "Incorrect password";
-                console.log("Incorrect password");
-                return;
+                // if the username is not in the list, add it to the list
+                usernames.push(username);
+                passwords.push(password);
+                rememberMeSave();
+
+                // encrypt the usernames and passwords
+                encryptedUsernames = btoa(JSON.stringify(usernames));
+                encryptedPasswords = btoa(JSON.stringify(passwords));
+
+                // set the cookies with the encrypted usernames and passwords
+                document.cookie = `usernames=${encryptedUsernames}; max-age=31536000; path=/`;
+                document.cookie = `passwords=${encryptedPasswords}; max-age=31536000; path=/`;
+
+                // redirect to the notes page
+                window.location.href = "notes.html";
             }
         }
-
-        users.push({ username, password });
-        document.cookie = `user=${btoa(JSON.stringify(users))}; path=/; max-age=604800`;
-        usernameSave = username;
-
-        // save cookie of the location of the user of logged in user in the array of users
-        const userIndex = users.indexOf(existingUser);
-        document.cookie = `userIndex=${userIndex}; path=/; max-age=604800`;
-
-        rememberMe();
-        window.location.href = "notes.html";
     }
 });
 
-function rememberMe() {
+function validateUsername(username) {
+    // regex to check if username is at least 6 characters long
+    const usernameRegex = /^[a-zA-Z0-9]{6,}$/;
+
+    try {
+        if (!username) {
+            throw new Error("No username provided");
+        }
+
+        if (!usernameRegex.test(username)) {
+            throw new Error("Username must be at least 6 characters long and can only contain letters and numbers");
+        }
+    } catch (error) {
+        return error.message;
+    }
+    return "";
+}
+
+function validatePassword(password) {
+    // regex to check if password is at least 8 characters long, contains at least one uppercase letter, one lowercase letter, one number, and one special character
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    try {
+        if (!password) {
+            throw new Error("No password provided");
+        }
+
+        if (!passwordRegex.test(password)) {
+            throw new Error("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character");
+        }
+    } catch (error) {
+        return error.message;
+    }
+    return "";
+}
+
+function rememberMeSave() {
     if (rememberMeCheckbox.checked) {
-        // save the username to cookies
-        document.cookie = `username=${usernameInput.value}; path=/; max-age=604800`;
+        // save the username to cookies called 'rememberMe', not encrypted
+        const username = usernameInput.value;
+        document.cookie = `rememberMe=${username}; max-age=31536000; path=/`;
     } else {
-        // delete the username from cookies
-        document.cookie = `username=; path=/; max-age=0`;
+        // delete the cookie
+        document.cookie = "rememberMe=; max-age=0; path=/";
     }
 }

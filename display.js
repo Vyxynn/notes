@@ -4,12 +4,38 @@ const tagsSearchContainer = document.getElementById('tagsSearchContainer');
 const addNoteButton = document.getElementById('addNoteButton');
 
 let currentDisplay = [];
+let allNotes = [];
 
 window.onload = function() {
     allNotes = loadFromLocalStorage();
     currentDisplay = allNotes;
     updateScreen();
     updateTagList();
+
+    // get the username from localStorage
+    const username = localStorage.getItem('usernameDisplay');
+    if (!username) {
+        // if the username is not found, redirect to the login page
+        window.location.href = "index.html";
+    }
+
+    // check if the theme is set in localStorage
+    const theme = localStorage.getItem('theme');
+    if (theme === 'light') {
+        // if the theme is dark, add the dark class to the body and remove the light class
+        document.body.classList.remove('dark');
+        document.body.classList.add('light');
+    } else if (theme === 'dark') {
+        // if the theme is light, add the light class to the body and remove the dark class
+        document.body.classList.remove('light');
+        document.body.classList.add('dark');
+    }
+
+    // if the theme is not set, set the default theme to light
+    if (!theme) {
+        localStorage.setItem('theme', 'light');
+        document.body.classList.add('light');
+    }
 }
 
 function updateTagList() {

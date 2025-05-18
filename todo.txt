@@ -1,2 +1,1 @@
-1. username doesn't save if remember me not clicked
-2. Theme switch in settings on notes page
+1. notes tied to account

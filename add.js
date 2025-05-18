@@ -143,6 +143,7 @@ addNoteButton.addEventListener('click', function() {
     });
 
     saveButton.addEventListener('click', function() {
+        console.log('Save button clicked');
         const title = titleInput.value;
         const content = quill.root.innerHTML;
         const tags = Array.from(tagsContainer.getElementsByClassName('addedTag')).map(element => element.innerHTML.trim());

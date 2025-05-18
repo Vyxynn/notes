@@ -60,7 +60,6 @@
 }
 
 .note {
-    background-color: white;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -98,14 +97,12 @@
 }
 
 .tag {
-    background-color: #ccc;
     padding: 5px 10px;
     border-radius: 5px;
     margin-right: 5px; 
 }
 
 .noteButtonContainer {
-    background-color: #e6e6e6;
     position: relative;
     top: -10px;
     height: calc(100% + 20px);
@@ -124,15 +121,6 @@
     padding: 5px;
     border-radius: 5px;
     border: none;
-}
-
-.noteButtonContainer > *:hover {
-    cursor: pointer;
-    background-color: #ccc;
-}
-
-.noteButtonContainer > *:active {
-    background-color: #aaa;
 }
 
 .noteButtonContainer > * > img {
@@ -206,7 +194,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
     padding: 20px;
     border-radius: 5px;
     display: none;
@@ -263,7 +250,6 @@
 }
 
 .addedTag {
-    background-color: #ccc;
     padding: 5px 10px;
     border-radius: 5px;
     display: flex;
@@ -275,5 +261,8 @@
 .addedTag:hover {
     /* cross out text */
     text-decoration: line-through;
-    background-color: #aaa;
+}
+
+.error {
+    color: red;
 }

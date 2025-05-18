@@ -1,0 +1,75 @@
+.light {
+    background-color: #f0f0f0 !important;
+    color: #000 !important;
+}
+
+.dark {
+    background-color: #121212 !important;
+    color: #fff !important;
+}
+
+
+.light .note {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.dark .note {
+    background-color: #121212 !important;
+    color: #fff !important;
+}
+
+
+.light .tag {
+    background-color: #ccc !important;
+    color: #000 !important;
+}
+
+.dark .tag {
+    background-color: #444 !important;
+    color: #fff !important;
+}
+
+
+.light .popup {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.dark .popup {
+    background-color: #121212 !important;
+    color: #fff !important;
+}
+
+
+.light .addedTag {
+    background-color: #ccc !important;
+    color: #000 !important;
+}
+
+.dark .addedTag {
+    background-color: #444 !important;
+    color: #fff !important;
+}
+
+
+.light .addedTag:hover {
+    background-color: #aaa !important;
+    color: #000 !important;
+}
+
+.dark .addedTag:hover {
+    background-color: #666 !important;
+    color: #fff !important;
+}
+
+
+.light #editor-container * { 
+    background-color: #fff !important;
+    color: #000 !important;
+}
+
+.dark #editor-container * {
+    background-color: #121212 !important;
+    color: #fff !important;
+}
