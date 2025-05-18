@@ -25,6 +25,7 @@ settingsButton.addEventListener('click', function() {
                 <button id="changeUsername">Change Username</button>
                 <button id="changePassword">Change Password</button>
                 <button id="deleteAccount">Delete Account</button>
+                <button id="logout">Logout</button>
             </div>
         </div>
     </div>
@@ -59,19 +60,33 @@ settingsButton.addEventListener('click', function() {
     const lightThemeRadio = popup.querySelector('#lightTheme');
     const darkThemeRadio = popup.querySelector('#darkTheme');
 
-    // Get the theme from localStorage
-    const theme = localStorage.getItem('theme');
-    if (theme === 'light') {
+    // get the userInfo from localStorage
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const userIndex = userInfo.findIndex(user => user.username === username);
+    if (userInfo[userIndex].theme === 'light') {
         lightThemeRadio.checked = true;
-    } else if (theme === 'dark') {
+        document.body.classList.add('light');
+    } else if (userInfo[userIndex].theme === 'dark') {
         darkThemeRadio.checked = true;
+        document.body.classList.add('dark');
     }
+
 
     lightThemeRadio.addEventListener('change', function() {
         if (lightThemeRadio.checked) {
             document.body.classList.remove('dark');
             document.body.classList.add('light');
-            localStorage.setItem('theme', 'light');
+
+            // get the username from localStorage
+            const username = localStorage.getItem('usernameDisplay');
+
+            // get the userInfo from localStorage
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const userIndex = userInfo.findIndex(user => user.username === username);
+
+            // update the theme in the userInfo in localStorage
+            userInfo[userIndex].theme = 'light';
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
         }
     });
 
@@ -79,7 +94,17 @@ settingsButton.addEventListener('click', function() {
         if (darkThemeRadio.checked) {
             document.body.classList.remove('light');
             document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
+            
+            // get the username from localStorage
+            const username = localStorage.getItem('usernameDisplay');
+
+            // get the userInfo from localStorage
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            const userIndex = userInfo.findIndex(user => user.username === username);
+
+            // update the theme in the userInfo in localStorage
+            userInfo[userIndex].theme = 'dark';
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
         }
     });
 
@@ -111,6 +136,15 @@ settingsButton.addEventListener('click', function() {
         profileInputContainer.innerHTML = html;
 
         // Save username button
+        const savedUsernameInput = profileInputContainer.querySelector('#newUsername');
+        savedUsernameInput.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const saveUsernameButton = profileInputContainer.querySelector('#saveUsername');
+                saveUsernameButton.click();
+            }
+        });
+
         const saveUsernameButton = profileInputContainer.querySelector('#saveUsername');
         saveUsernameButton.addEventListener('click', function() {
             const newUsername = profileInputContainer.querySelector('#newUsername').value;
@@ -149,6 +183,12 @@ settingsButton.addEventListener('click', function() {
                 encryptedUsernames = btoa(JSON.stringify(usernames));
                 document.cookie = `usernames=${encryptedUsernames}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
 
+                // update the username in the userInfo in localStorage
+                const userInfo = JSON.parse(localStorage.getItem('userInfo')) || [];
+                const userIndexInUserInfo = userInfo.findIndex(user => user.username === username);
+                userInfo[userIndexInUserInfo].username = newUsername;
+                localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
                 // remove the input fields
                 profileInputContainer.innerHTML = "";
             }
@@ -178,6 +218,15 @@ settingsButton.addEventListener('click', function() {
         profileInputContainer.innerHTML = html;
 
         // Save password button
+        const savedPasswordInput = profileInputContainer.querySelector('#newPassword');
+        savedPasswordInput.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                const savePasswordButton = profileInputContainer.querySelector('#savePassword');
+                savePasswordButton.click();
+            }
+        });
+
         const savePasswordButton = profileInputContainer.querySelector('#savePassword');
         savePasswordButton.addEventListener('click', function() {
             const newPassword = profileInputContainer.querySelector('#newPassword').value;
@@ -257,6 +306,11 @@ settingsButton.addEventListener('click', function() {
             encryptedPasswords = btoa(JSON.stringify(passwords));
             document.cookie = `passwords=${encryptedPasswords}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
 
+            // remove the userInfo from localStorage
+            const userInfo = JSON.parse(localStorage.getItem('userInfo')) || [];
+            userInfo.splice(userIndex, 1);
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
             // redirect to the login page
             window.location.href = "index.html";
         });
@@ -267,6 +321,34 @@ settingsButton.addEventListener('click', function() {
             profileInputContainer.innerHTML = "";
         });
     }); 
+
+    // Logout button
+    const logoutButton = popup.querySelector('#logout');
+    logoutButton.addEventListener('click', function() {
+        const html = `
+        <p>Are you sure you want to logout?</p>
+        <button id="confirmLogout">Yes</button>
+        <button id="cancelLogout">No</button>
+        `;
+
+        profileInputContainer.innerHTML = html;
+
+        // Confirm logout button
+        const confirmLogoutButton = profileInputContainer.querySelector('#confirmLogout');
+        confirmLogoutButton.addEventListener('click', function() {
+            // remove the username from localStorage
+            localStorage.removeItem('usernameDisplay');
+
+            // redirect to the login page
+            window.location.href = "index.html";
+        });
+
+        // Cancel logout button
+        const cancelLogoutButton = profileInputContainer.querySelector('#cancelLogout');
+        cancelLogoutButton.addEventListener('click', function() {
+            profileInputContainer.innerHTML = "";
+        });
+    });
 
     document.body.appendChild(blur);
     document.body.appendChild(popup);

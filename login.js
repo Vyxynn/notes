@@ -22,6 +22,24 @@ window.onload = function() {
         // if it does not exist, set the checkbox to false
         rememberMeCheckbox.checked = false;
     }
+
+    // auto focus on the username input
+    usernameInput.focus();
+
+    // add enter key event listener to the username and password inputs
+    usernameInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            passwordInput.focus();
+        }
+    });
+
+    passwordInput.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            loginButton.click();
+        }
+    });
 }
 
 loginButton.addEventListener("click", function(event) {

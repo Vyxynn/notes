@@ -98,6 +98,13 @@ addNoteButton.addEventListener('click', function() {
         document.body.removeChild(blur);
     });
 
+    addTagInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            addTagButton.click();
+        }
+    });
+
     addTagButton.addEventListener('click', function() {
         const tag = addTagInput.value.trim();
         if (tag) {
@@ -295,6 +302,13 @@ function editNote(note) {
         document.body.removeChild(blur);
     });
 
+    addTagInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            addTagButton.click();
+        }
+    });
+
     addTagButton.addEventListener('click', function() {
         const tag = addTagInput.value.trim();
         if (tag) {
@@ -361,15 +375,23 @@ function editNote(note) {
 }
 
 function deleteNote(note) {
-    const notes = loadFromLocalStorage();
-    const index = notes.findIndex(n => n.title === note.title && n.content === note.content);
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const username = localStorage.getItem('usernameDisplay');
+    const userIndex = userInfo.findIndex(user => user.username === username);
 
-    if (index !== -1) {
-        notes.splice(index, 1);
-        localStorage.setItem('notes', JSON.stringify(notes));
-        console.log('Note deleted');
+    if (userIndex !== -1) {
+        const notes = userInfo[userIndex].notes;
+        const index = notes.findIndex(n => n.title === note.title && n.content === note.content);
+
+        if (index !== -1) {
+            notes.splice(index, 1);
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+            console.log('Note deleted');
+        } else {
+            console.log('Note not found');
+        }
     } else {
-        console.log('Note not found');
+        console.log('User not found');
     }
 
     allNotes = loadFromLocalStorage();

@@ -19,27 +19,29 @@ window.onload = function() {
         window.location.href = "index.html";
     }
 
-    // check if the theme is set in localStorage
-    const theme = localStorage.getItem('theme');
-    if (theme === 'light') {
-        // if the theme is dark, add the dark class to the body and remove the light class
-        document.body.classList.remove('dark');
-        document.body.classList.add('light');
-    } else if (theme === 'dark') {
-        // if the theme is light, add the light class to the body and remove the dark class
-        document.body.classList.remove('light');
-        document.body.classList.add('dark');
-    }
+    // get the theme from userInfo
+    const userInfo = JSON.parse(localStorage.getItem('userInfo')) || [];
+    const userIndex = userInfo.findIndex(user => user.username === username);
+    const theme = userInfo[userIndex].theme || 'light';
 
-    // if the theme is not set, set the default theme to light
-    if (!theme) {
-        localStorage.setItem('theme', 'light');
+    if (theme === 'light') {
         document.body.classList.add('light');
+        document.body.classList.remove('dark');
+    } else if (theme === 'dark') {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
     }
 }
 
 function updateTagList() {
-    const notes = JSON.parse(localStorage.getItem('notes')) || [];
+    // get username from localStorage
+    const username = localStorage.getItem('usernameDisplay');
+
+    // get the userInfo from localStorage
+    const userInfo = JSON.parse(localStorage.getItem('userInfo')) || [];
+    const userIndex = userInfo.findIndex(user => user.username === username);
+    const notes = userInfo[userIndex].notes || [];
+
     const tags = new Set();
     notes.forEach(note => note.tags.forEach(tag => tags.add(tag)));
     tagsSearchContainer.innerHTML = '';
@@ -140,3 +142,7 @@ function searchByText() {
     }
     updateScreen();
 }
+
+
+
+
