@@ -10,6 +10,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Lucida Sans', sans-serif;
+}
+
+h1, h2, h3, .siteLogo {
+    font-family: Georgia, serif;
+}
+
+.noteDateText {
+    font-family: Monaco, Consolas, monospace;
 }
 
 #container {

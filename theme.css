@@ -84,3 +84,7 @@
     background-color: var(--dark-background-color) !important;
     color: var(--dark-color) !important;
 }
+
+.dark .dateIcon {
+    filter: invert(100%) !important;
+}

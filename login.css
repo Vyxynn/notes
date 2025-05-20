@@ -10,6 +10,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Lucida Sans, sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: Georgia, serif;
 }
 
 #container {
@@ -68,6 +73,10 @@ button:active {
     justify-content: center;
     text-wrap: nowrap;
     gap: 10px;
+}
+
+.timestamp {
+    font-family: Monaco, Consolas, monospace;
 }
 
 /* tablet */

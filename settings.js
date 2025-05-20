@@ -251,6 +251,8 @@ settingsButton.addEventListener('click', function() {
                 passwords[userIndex] = newPassword;
                 encryptedPasswords = btoa(JSON.stringify(passwords));
                 document.cookie = `passwords=${encryptedPasswords}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+
+                profileInputContainer.innerHTML = "";
             }
         });
 
