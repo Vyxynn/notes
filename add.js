@@ -74,7 +74,6 @@ addNoteButton.addEventListener('click', function() {
             ['image', 'video', 'link'],
             ],
         },
-        placeholder: 'Compose an epic...',
         theme: 'snow', // or 'bubble'
     });
 
@@ -150,11 +149,14 @@ addNoteButton.addEventListener('click', function() {
     });
 
     saveButton.addEventListener('click', function() {
-        console.log('Save button clicked');
         const title = titleInput.value;
         const content = quill.root.innerHTML;
         const tags = Array.from(tagsContainer.getElementsByClassName('addedTag')).map(element => element.innerHTML.trim());
-        const note = { title, content, tags };
+        const now = new Date();
+        const pad = n => n.toString().padStart(2, '0');
+        const datetime = `${now.getFullYear()}-${pad(Math.floor(now.getMonth() + 1))}-${pad(Math.floor(now.getDate()))} ${pad(Math.floor(now.getHours()))}:${pad(Math.floor(now.getMinutes()))}:${pad(Math.floor(now.getSeconds()))}`;
+
+        const note = { title, content, tags, datetime };
         addNote(note);
         document.body.removeChild(popup);
         document.body.removeChild(blur);
@@ -162,7 +164,6 @@ addNoteButton.addEventListener('click', function() {
 });
 
 function addNote(note) {
-    console.log(note);
     allNotes.push(note);
     currentDisplay = allNotes;
     updateScreen();
@@ -183,8 +184,6 @@ function addNote(note) {
 }
 
 function editNote(note) {
-    console.log(note);
-    
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.style.display = 'block';
@@ -357,7 +356,11 @@ function editNote(note) {
         const title = titleInput.value;
         const content = quill.root.innerHTML;
         const tags = Array.from(tagsContainer.getElementsByClassName('addedTag')).map(element => element.innerHTML.trim());
-        const updatedNote = { title, content, tags };
+        const now = new Date();
+        const pad = n => n.toString().padStart(2, '0');
+        const datetime = `${now.getFullYear()}-${pad(Math.floor(now.getMonth() + 1))}-${pad(Math.floor(now.getDate()))} ${pad(Math.floor(now.getHours()))}:${pad(Math.floor(now.getMinutes()))}:${pad(Math.floor(now.getSeconds()))}`;
+
+        const updatedNote = { title, content, tags, datetime };
         
         // update the note in the allNotes array
         const index = allNotes.findIndex(n => n.title === note.title && n.content === note.content);

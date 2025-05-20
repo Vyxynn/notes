@@ -1,75 +1,86 @@
+:root {
+    --light-background-color: #f0f0f0;
+    --light-color: #000;
+    --dark-background-color: #121212;
+    --dark-color: #fff;
+    --light-tag-background-color: #ccc;
+    --dark-tag-background-color: #444;
+    --light-tag-color: #000;
+    --dark-tag-color: #fff;
+}
+
 .light {
-    background-color: #f0f0f0 !important;
-    color: #000 !important;
+    background-color: var(--light-background-color) !important;
+    color: var(--light-color) !important;
 }
 
 .dark {
-    background-color: #121212 !important;
-    color: #fff !important;
+    background-color: var(--dark-background-color) !important;
+    color: var(--dark-color) !important;
 }
 
 
 .light .note {
-    background-color: #fff !important;
-    color: #000 !important;
+    background-color: var(--light-background-color) !important;
+    color: var(--light-color) !important;
 }
 
 .dark .note {
-    background-color: #121212 !important;
-    color: #fff !important;
+    background-color: var(--dark-background-color) !important;
+    color: var(--dark-color) !important;
 }
 
 
 .light .tag {
-    background-color: #ccc !important;
-    color: #000 !important;
+    background-color: var(--light-tag-background-color) !important;
+    color: var(--light-tag-color) !important;
 }
 
 .dark .tag {
-    background-color: #444 !important;
-    color: #fff !important;
+    background-color: var(--dark-tag-background-color) !important;
+    color: var(--dark-tag-color) !important;
 }
 
 
 .light .popup {
-    background-color: #fff !important;
-    color: #000 !important;
+    background-color: var(--light-background-color) !important;
+    color: var(--light-color) !important;
 }
 
 .dark .popup {
-    background-color: #121212 !important;
-    color: #fff !important;
+    background-color: var(--dark-background-color) !important;
+    color: var(--dark-color) !important;
 }
 
 
 .light .addedTag {
-    background-color: #ccc !important;
-    color: #000 !important;
+    background-color: var(--light-tag-background-color) !important;
+    color: var(--light-tag-color) !important;
 }
 
 .dark .addedTag {
-    background-color: #444 !important;
-    color: #fff !important;
+    background-color: var(--dark-tag-background-color) !important;
+    color: var(--dark-tag-color) !important;
 }
 
 
 .light .addedTag:hover {
-    background-color: #aaa !important;
-    color: #000 !important;
+    background-color: var(--light-tag-background-color) !important;
+    color: var(--light-tag-color) !important;
 }
 
 .dark .addedTag:hover {
-    background-color: #666 !important;
-    color: #fff !important;
+    background-color: var(--dark-tag-background-color) !important;
+    color: var(--dark-tag-color) !important;
 }
 
 
 .light #editor-container * { 
-    background-color: #fff !important;
-    color: #000 !important;
+    background-color: var(--light-background-color) !important;
+    color: var(--light-color) !important;
 }
 
 .dark #editor-container * {
-    background-color: #121212 !important;
-    color: #fff !important;
+    background-color: var(--dark-background-color) !important;
+    color: var(--dark-color) !important;
 }

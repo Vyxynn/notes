@@ -245,12 +245,10 @@ settingsButton.addEventListener('click', function() {
                 // save the old password
                 let encryptedPasswords = document.cookie.split('; ').find(x => x.startsWith('passwords'))?.split('=')[1];
                 let passwords = encryptedPasswords ? JSON.parse(atob(encryptedPasswords)) : [];
-                console.log(passwords);
                 const oldPassword = passwords[userIndex];
 
                 // update the password in the 'passwords' cookie
                 passwords[userIndex] = newPassword;
-                console.log(passwords);
                 encryptedPasswords = btoa(JSON.stringify(passwords));
                 document.cookie = `passwords=${encryptedPasswords}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
             }

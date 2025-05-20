@@ -8,7 +8,9 @@ let allNotes = [];
 
 window.onload = function() {
     allNotes = loadFromLocalStorage();
+    console.log('All notes:', allNotes);
     currentDisplay = allNotes;
+    console.log('Current display:', currentDisplay);
     updateScreen();
     updateTagList();
 
@@ -89,16 +91,33 @@ function updateScreen() {
                 <div class="tags">
                     ${note.tags.map(tag => `<div class="tag" style="width: fit-content;">${tag}</div>`).join('')}
                 </div>
+                <div class="noteDate">
+                    <img class="dateIcon" src="./assets/clockIcon.svg" alt="Date Icon" style="width: 20px;">
+                    <p class="noteDateText" style="display: none;">${note.datetime}</p>
+                </div>
             `;
 
             noteDiv.appendChild(noteInfo);
             noteDiv.appendChild(buttonContainer);
             notesContainer.appendChild(noteDiv);
 
+            // hover to show the date
+            const dateIcon = noteDiv.querySelector('.dateIcon');
+            const noteDateText = noteDiv.querySelector('.noteDateText');
+
+            dateIcon.addEventListener('mouseover', function() {
+                noteDateText.style.display = 'block';
+            });
+
+            dateIcon.addEventListener('mouseout', function() {
+                noteDateText.style.display = 'none';
+            });
+
             // add event listeners to the edit and delete buttons
             editButton.addEventListener('click', function() {
                 editNote(note);
             });
+
             deleteButton.addEventListener('click', function() {
                 deleteNote(note);
             });

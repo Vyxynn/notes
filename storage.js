@@ -26,6 +26,7 @@ function loadFromLocalStorage() {
     if (userIndex === -1) {
         return [];
     }
+    console.log('User index:', userIndex);
     console.log(userInfo);
     return userInfo[userIndex].notes;
 }
